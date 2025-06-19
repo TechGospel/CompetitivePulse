@@ -1,0 +1,162 @@
+import { Link, useLocation } from "wouter";
+import { User } from "@shared/schema";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { 
+  BarChart3, 
+  Users, 
+  TrendingUp, 
+  DollarSign, 
+  Settings, 
+  Download,
+  X
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface SidebarProps {
+  user: User;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ user, isOpen, onClose }: SidebarProps) {
+  const [location] = useLocation();
+
+  const userInitials = user.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+  const navigation = [
+    { name: "Dashboard", href: "/", icon: BarChart3, current: location === "/" },
+    { name: "Competitors", href: "/competitors", icon: Users },
+    { name: "Market Trends", href: "/trends", icon: TrendingUp },
+    { name: "Pricing Analysis", href: "/pricing", icon: DollarSign },
+  ];
+
+  const adminNavigation = user.role === "admin" ? [
+    { name: "User Management", href: "/users", icon: Users },
+    { name: "Settings", href: "/settings", icon: Settings },
+  ] : [];
+
+  return (
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">CompetitorIQ</h1>
+              <p className="text-sm text-gray-500 mt-1 capitalize">{user.role} Dashboard</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="lg:hidden"
+              onClick={onClose}
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 p-4 space-y-2">
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link key={item.name} href={item.href}>
+                  <a
+                    className={cn(
+                      "flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                      item.current || location === item.href
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-700 hover:bg-gray-100"
+                    )}
+                    onClick={onClose}
+                  >
+                    <Icon className="mr-3 h-5 w-5" />
+                    {item.name}
+                  </a>
+                </Link>
+              );
+            })}
+
+            {/* Admin Section */}
+            {adminNavigation.length > 0 && (
+              <>
+                <hr className="my-4 border-gray-200" />
+                <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                  Administration
+                </p>
+                {adminNavigation.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link key={item.name} href={item.href}>
+                      <a
+                        className={cn(
+                          "flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                          location === item.href
+                            ? "text-blue-600 bg-blue-50"
+                            : "text-gray-700 hover:bg-gray-100"
+                        )}
+                        onClick={onClose}
+                      >
+                        <Icon className="mr-3 h-5 w-5" />
+                        {item.name}
+                      </a>
+                    </Link>
+                  );
+                })}
+              </>
+            )}
+
+            <hr className="my-4 border-gray-200" />
+            <Link href="/export">
+              <a
+                className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={onClose}
+              >
+                <Download className="mr-3 h-5 w-5" />
+                Export Reports
+              </a>
+            </Link>
+          </nav>
+
+          {/* User Profile */}
+          <div className="p-4 border-t border-gray-200">
+            <div className="bg-gray-50 rounded-lg p-3">
+              <div className="flex items-center">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-blue-600 text-white text-sm">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="ml-3 flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {user.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </>
+  );
+}
