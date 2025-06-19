@@ -25,7 +25,7 @@ export default function Dashboard() {
     .toUpperCase();
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
       <Sidebar 
         user={user} 
@@ -34,48 +34,51 @@ export default function Dashboard() {
       />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto lg:ml-64">
+      <main className="flex-1 overflow-auto lg:ml-0">
         {/* Top Navigation */}
-        <header className="bg-white border-b border-gray-200 px-4 py-4 lg:px-8">
+        <header className="bg-card border-b border-border px-3 py-3 lg:px-6 lg:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center min-w-0">
               <Button
                 variant="ghost"
                 size="sm"
-                className="lg:hidden mr-2"
+                className="lg:hidden mr-2 p-1"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Menu className="h-5 w-5" />
               </Button>
-              <h2 className="text-2xl font-bold text-gray-900">Market Intelligence Dashboard</h2>
+              <h2 className="text-lg lg:text-2xl font-bold truncate">
+                <span className="hidden sm:inline">Market Intelligence Dashboard</span>
+                <span className="sm:hidden">Dashboard</span>
+              </h2>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="relative hidden sm:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <div className="flex items-center space-x-2 lg:space-x-4">
+              <div className="relative hidden md:block">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                 <Input
                   type="text"
-                  placeholder="Search competitors, trends..."
-                  className="pl-10 w-64"
+                  placeholder="Search competitors..."
+                  className="pl-10 w-48 lg:w-64"
                 />
               </div>
 
               <Button variant="ghost" size="sm" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                <Bell className="h-4 w-4 lg:h-5 lg:w-5" />
+                <span className="absolute -top-1 -right-1 w-4 h-4 lg:w-5 lg:h-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
                   3
                 </span>
               </Button>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-blue-600 text-white text-sm">
+                  <Button variant="ghost" className="flex items-center space-x-1 lg:space-x-2 p-1 lg:p-2">
+                    <Avatar className="h-6 w-6 lg:h-8 lg:w-8">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xs lg:text-sm">
                         {userInitials}
                       </AvatarFallback>
                     </Avatar>
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
+                    <ChevronDown className="h-3 w-3 lg:h-4 lg:w-4 text-muted-foreground mobile-hidden" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -89,12 +92,12 @@ export default function Dashboard() {
         </header>
 
         {/* Dashboard Content */}
-        <div className="p-4 lg:p-8 space-y-8">
+        <div className="p-3 lg:p-6 xl:p-8 space-y-4 lg:space-y-6 xl:space-y-8">
           {/* Metrics Overview */}
           <MetricsOverview />
 
           {/* Charts Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6 xl:gap-8">
             <PricingChart />
             <MarketShareChart />
           </div>

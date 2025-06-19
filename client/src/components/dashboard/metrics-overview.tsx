@@ -10,14 +10,14 @@ export default function MetricsOverview() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Card key={i}>
-            <CardContent className="pt-6">
-              <Skeleton className="h-12 w-12 rounded-lg mb-4" />
-              <Skeleton className="h-4 w-24 mb-2" />
-              <Skeleton className="h-8 w-16 mb-4" />
-              <Skeleton className="h-4 w-20" />
+          <Card key={i} className="dashboard-card">
+            <CardContent className="p-4 lg:p-6">
+              <Skeleton className="h-8 w-8 lg:h-12 lg:w-12 rounded-lg mb-3 lg:mb-4" />
+              <Skeleton className="h-3 w-16 lg:h-4 lg:w-24 mb-2" />
+              <Skeleton className="h-6 w-12 lg:h-8 lg:w-16 mb-3 lg:mb-4" />
+              <Skeleton className="h-3 w-14 lg:h-4 lg:w-20" />
             </CardContent>
           </Card>
         ))}
@@ -73,30 +73,30 @@ export default function MetricsOverview() {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
       {metricCards.map((metric) => {
         const Icon = metric.icon;
         return (
-          <Card key={metric.title} className="shadow-sm border border-gray-200">
-            <CardContent className="pt-6">
+          <Card key={metric.title} className="dashboard-card">
+            <CardContent className="p-4 lg:p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">{metric.title}</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{metric.value}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs lg:text-sm font-medium text-muted-foreground truncate">{metric.title}</p>
+                  <p className="text-xl lg:text-3xl font-bold mt-1 lg:mt-2">{metric.value}</p>
                 </div>
-                <div className={`w-12 h-12 ${metric.iconBg} rounded-lg flex items-center justify-center`}>
-                  <Icon className={`${metric.iconColor} h-6 w-6`} />
+                <div className={`w-8 h-8 lg:w-12 lg:h-12 ${metric.iconBg} dark:bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0`}>
+                  <Icon className={`${metric.iconColor} h-4 w-4 lg:h-6 lg:w-6`} />
                 </div>
               </div>
-              <div className="mt-4 flex items-center">
+              <div className="mt-3 lg:mt-4 flex items-center">
                 <span
-                  className={`text-sm font-medium ${
-                    metric.changeType === "positive" ? "text-green-600" : "text-red-600"
+                  className={`text-xs lg:text-sm font-medium ${
+                    metric.changeType === "positive" ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
                   }`}
                 >
                   {metric.change}
                 </span>
-                <span className="text-gray-500 text-sm ml-2">vs last month</span>
+                <span className="text-muted-foreground text-xs lg:text-sm ml-2 mobile-hidden">vs last month</span>
               </div>
             </CardContent>
           </Card>
