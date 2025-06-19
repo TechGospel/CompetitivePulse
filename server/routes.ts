@@ -70,7 +70,7 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/competitors", requireAnalystOrAdmin, async (req, res) => {
     try {
       const validatedData = insertCompetitorSchema.parse(req.body);
-      const competitor = await storage.createCompetitor(validatedData, req.user.id);
+      const competitor = await storage.createCompetitor(validatedData, req.user!.id);
       res.status(201).json(competitor);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -180,7 +180,7 @@ export function registerRoutes(app: Express): Server {
       const id = parseInt(req.params.id);
       
       // Prevent admin from deleting themselves
-      if (id === req.user.id) {
+      if (id === req.user!.id) {
         return res.status(400).json({ message: "Cannot delete your own account" });
       }
       
